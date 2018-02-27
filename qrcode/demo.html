@@ -1,0 +1,111 @@
+<!--
+function is_weixn(){    var ua = navigator.userAgent.toLowerCase();    if(ua.match(/MicroMessenger/i)=="micromessenger") {        return true;    } else {        return false;    }}
+
+作者：张蒂
+链接：https://www.zhihu.com/question/20817441/answer/22957369
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+ -->
+
+
+
+<!--
+利用ua来判断是否是微信
+下面是抓取到的ua 
+Mozilla/5.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12A365 MicroMessenger/5.4.1 NetType/WIFI
+我们可以通过MicroMessenger关键字来判读是否是微信
+js事例
+function is_weixin(){var ua = navigator.userAgent.toLowerCase();  if(ua.match(/MicroMessenger/i)=="micromessenger") {        return true;  } else {      return false;  }}
+
+
+var ua = window.navigator.userAgent.toLowerCase(); 
+if(ua.match(/MicroMessenger/i) != 'micromessenger'){ 
+    // 这里警告框会阻塞当前页面继续加载
+    alert('已禁止本次访问：您必须使用微信内置浏览器访问本页面！');
+    // 以下代码是用javascript强行关闭当前页面
+    var opened = window.open('about:blank', '_self');
+    opened.opener = null;
+    opened.close();
+} 
+
+ -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
+<head>
+<title>Cross-Browser QRCode generator for Javascript</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+<!-- <script type="text/javascript" src="http://js.sohu.com/library/jquery-1.7.1.min.js"></script> -->
+<script type="text/javascript" src="qrcode.js"></script>
+</head>
+<body>
+
+<div id="qrcode"></div>
+<div id="text" type="text">刷新一下<div/>
+
+<script type="text/javascript">
+
+function fn () {
+    var s = [];
+    var str = '0123456789abcdef';
+    for(var i=0; i<36; i++){
+        s[i]=str.substr(Math.floor(Math.random()*0x10),1)//Math.random：随机数，Math.floor:向下取整，subStr:在字符串中抽取start开始的指定字符串个数
+    }
+    s[14]='4',
+    s[19]=str.substr((s[19]&0x3) | 0x8,1)
+    console.log(s[19],'s19')
+     s[8] = s[13] = s[18] = s[23] = "";
+     var uuid=s.join("")
+     return uuid
+ }
+
+// 获取元素并给元素添加点击事件
+var div=document.getElementById('text')
+div.onclick = function(){
+      var uuid = fn ()
+      qrcode.makeCode("https://voctest.speiyou.cn/stone-complaint-rest/#/detail/detailPage?workOrderId=1802111314&empCode=049385&enterStatus=1&a="+uuid);//改变实例化对象的text值
+}
+
+// 设置二维码的配置信息，其他的配置信息可百度
+var qrcode = new QRCode('qrcode', {
+    text :"https://www.baidu.com?a="+fn(),
+    width : 200,
+    height : 200,
+    colorDark: '#123'
+});
+
+
+// 还可以清除当前二维码或者生产新的二维码,用法如下：
+qrcode.clear(); // clear the code.
+qrcode.makeCode("http://naver.com"); // make another code.
+
+
+
+
+ // input输入框来改变二维码的地址，从而生成不同的二维码
+// function makeCode () {
+//     var elText = document.getElementById("text");
+//     if (!elText.value) {
+//         alert("Input a text");
+//         elText.focus();
+//         return;
+//     }
+//     qrcode.makeCode(elText.value);
+// }
+
+// 生成默认的二维码
+// makeCode();
+
+
+//当输入框失去焦点或者是点击了键盘的enter键默认用户输入完毕，此时生成新的二维码
+// $("#text").
+//     on("blur", function () {
+//         makeCode();
+//     }).
+//     on("keydown", function (e) {
+//         if (e.keyCode == 13) {
+//             makeCode();
+//         }
+//     });
+</script>
+</body>
