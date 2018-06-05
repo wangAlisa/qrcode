@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <script type="text/javascript" src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
  <script type="text/javascript" src="qrcode.js"></script>
 </head>
 <style>
@@ -50,6 +51,39 @@
       downloadLink.setAttribute('href', url);
       downloadLink.setAttribute('download', '二维码');
       downloadLink.click();
+    }
+
+    // 判断是不是长按
+    var timeOutEvent=0;
+    var timer;
+    $(function(){
+      $("#qrcode").on({
+        touchstart: function(e){
+          timeOutEvent = setTimeout("longPress()",500);
+          console.log(timeOutEvent)
+          e.preventDefault();
+        },
+        touchmove: function(){
+          clearTimeout(timeOutEvent);
+          timeOutEvent = 0;
+        },
+        touchend: function(){
+          clearTimeout(timeOutEvent);
+          clearInterval(timer)
+          if(timeOutEvent!=0){
+            console.log("你这是点击，不是长按");
+          }
+          return false;
+        }
+      })
+    });
+    function longPress(){
+      timeOutEvent = 0;
+      console.log("长按事件触发发");
+      window.location.href = 'http://www.baidu.com'
+      timer=setInterval(function(){
+        console.log(1)
+      },500)
     }
   </script>
 </body>
